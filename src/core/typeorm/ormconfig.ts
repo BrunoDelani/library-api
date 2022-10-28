@@ -8,7 +8,7 @@ const dataSource = new DataSource({
     username: CONNECTION_USERNAME,
     password: CONNECTION_PASSWORD,
     database: CONNECTION_DB,
-    entities: ['./dist/core/typeorm/entity/*.entity.{js,ts}'],
+    entities: ['./dist/core/typeorm/entities/*.entity.{js,ts}'],
     synchronize: true,
     migrationsRun: true,
     migrations: ['./dist/core/typeorm/migrations/*.{js,ts}'],
