@@ -6,7 +6,7 @@ export class Book {
     @PrimaryGeneratedColumn("uuid")
     id: number;
 
-    @Column({ type: 'varchar', length: 60, nullable: false })
+    @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
     name: string;
 
     @Column({ type: 'varchar', length: 500, nullable: false })
@@ -37,6 +37,6 @@ export class Book {
     @Column({ type: 'decimal', precision: 6, scale: 2, nullable: false })
     value: number;
 
-    @Column({ type: 'varchar', nullable: false })
+    @Column({ type: 'varchar', nullable: false, unique: true })
     image_path: string;
 }
