@@ -1,9 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { CategoryRepository } from '../data/categories.repository';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/update-category.dto';
 
 @Injectable()
 export class CategoriesService {
+  constructor(
+    @Inject('categoryRepository') private categoryRepository: CategoryRepository,
+  ) { }
+
   create(createCategoryDto: CreateCategoryDto) {
     return 'This action adds a new category';
   }
