@@ -1,7 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CategoryRepository } from '../data/categories.repository';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/update-category.dto';
+import { CategoryErrorEnum } from '../errors/categories.error.enum';
 
 @Injectable()
 export class CategoriesService {
@@ -9,8 +10,11 @@ export class CategoriesService {
     @Inject('categoryRepository') private categoryRepository: CategoryRepository,
   ) { }
 
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  async create(payload: CreateCategoryDto) {
+    if (await this.categoryRepository.findOneByName(payload.name)){
+      throw new BadRequestException(CategoryErrorEnum.CATEGORY_ALREADY_EXISTS);
+    }
+    return await this.categoryRepository.create(payload);
   }
 
   findAll() {

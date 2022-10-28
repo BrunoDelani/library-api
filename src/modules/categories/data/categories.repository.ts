@@ -7,6 +7,7 @@ export interface CategoryRepository {
     create(payload: CreateCategoryDto): Promise<Category>;
     findAll(query: FindCategoryDto): Promise<Category[]>;
     findOne(id: number): Promise<Category>;
+    findOneByName(name: string): Promise<Category|null>;
     update(id: number, payload: UpdateCategoryDto): Promise<Category>;
     remove(id: number): Promise<void>;
 
