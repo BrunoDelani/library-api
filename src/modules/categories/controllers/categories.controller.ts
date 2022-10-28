@@ -1,5 +1,7 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Category } from 'src/core/typeorm/entities/category.entity';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
+import { FindCategoryDto } from '../dtos/find-category.dto';
 import { UpdateCategoryDto } from '../dtos/update-category.dto';
 import { CategoryErrorEnum } from '../errors/categories.error.enum';
 import { CategoriesService } from '../services/categories.service';
@@ -9,7 +11,7 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) { }
 
   @Post()
-  create(@Body() payload: CreateCategoryDto) {
+  create(@Body() payload: CreateCategoryDto): Promise<Category | BadRequestException> {
     try {
       return this.categoriesService.create(payload);
     } catch (err) {
@@ -21,8 +23,14 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(@Query() query: FindCategoryDto): Promise<Category[] | BadRequestException> {
+    try {
+      return this.categoriesService.findAll(query);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+    }
   }
 
   @Get(':id')

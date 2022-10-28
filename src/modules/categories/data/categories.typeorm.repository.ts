@@ -1,6 +1,6 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { Category } from "src/core/typeorm/entities/category.entity";
-import { Repository } from "typeorm";
+import { Like, Repository } from "typeorm";
 import { CreateCategoryDto } from "../dtos/create-category.dto";
 import { FindCategoryDto } from "../dtos/find-category.dto";
 import { UpdateCategoryDto } from "../dtos/update-category.dto";
@@ -13,9 +13,19 @@ export class CategoryTypeOrmRepository implements CategoryRepository {
         return this.categoryRepository.save(payload);
     }
 
-    findAll(query: FindCategoryDto): Promise<Category[]> {
-        throw new Error("Method not implemented.");
+    async findAll(query: FindCategoryDto): Promise<Category[]> {
+        const { name } = query;
+        const categories = await this.categoryRepository.find({
+            where: {
+                name: name ? Like(`%${name}%`) : Like('%%')
+            },
+            select: {
+                name: true
+            }
+        });
+        return categories;
     }
+
     findOne(id: number): Promise<Category> {
         throw new Error("Method not implemented.");
     }

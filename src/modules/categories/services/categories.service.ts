@@ -1,6 +1,8 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Category } from 'src/core/typeorm/entities/category.entity';
 import { CategoryRepository } from '../data/categories.repository';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
+import { FindCategoryDto } from '../dtos/find-category.dto';
 import { UpdateCategoryDto } from '../dtos/update-category.dto';
 import { CategoryErrorEnum } from '../errors/categories.error.enum';
 
@@ -10,15 +12,15 @@ export class CategoriesService {
     @Inject('categoryRepository') private categoryRepository: CategoryRepository,
   ) { }
 
-  async create(payload: CreateCategoryDto) {
-    if (await this.categoryRepository.findOneByName(payload.name)){
+  async create(payload: CreateCategoryDto): Promise<Category | BadRequestException> {
+    if (await this.categoryRepository.findOneByName(payload.name)) {
       throw new BadRequestException(CategoryErrorEnum.CATEGORY_ALREADY_EXISTS);
     }
     return await this.categoryRepository.create(payload);
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll(query: FindCategoryDto): Promise<Category[] | BadRequestException> {
+    return await this.categoryRepository.findAll(query);
   }
 
   findOne(id: number) {
