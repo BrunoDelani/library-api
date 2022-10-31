@@ -3,7 +3,6 @@ import { Category } from 'src/core/typeorm/entities/category.entity';
 import { Like, Repository } from 'typeorm';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { FindCategoryDto } from '../dtos/find-category.dto';
-import { UpdateCategoryDto } from '../dtos/update-category.dto';
 import { CategoryRepository } from './categories.repository';
 
 export class CategoryTypeOrmRepository implements CategoryRepository {
@@ -34,7 +33,7 @@ export class CategoryTypeOrmRepository implements CategoryRepository {
   update(payload: Category): Promise<Category> {
     return this.categoryRepository.save(payload);
   }
-  remove(id: number): Promise<void> {
-    throw new Error('Method not implemented.');
+  async remove(id: string): Promise<void> {
+    this.categoryRepository.delete(id);
   }
 }

@@ -53,7 +53,10 @@ export class CategoriesService {
     return await this.categoryRepository.update(category);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string): Promise<void | BadRequestException> {
+    const category = await this.categoryRepository.findOne(id);
+    if (!category)
+      throw new BadRequestException(CategoryErrorEnum.CATEGORY_NOT_FOUND);
+    await this.categoryRepository.remove(id);
   }
 }

@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -75,7 +76,15 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoriesService.remove(+id);
+  @HttpCode(204)
+  remove(@Param('id') id: string): Promise<void | BadRequestException> {
+    try {
+      return this.categoriesService.remove(id);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+      throw new BadRequestException(CategoryErrorEnum.CATEGORY_NOT_FOUND);
+    }
   }
 }
