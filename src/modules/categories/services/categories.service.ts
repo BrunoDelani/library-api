@@ -23,8 +23,10 @@ export class CategoriesService {
     return await this.categoryRepository.findAll(query);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string): Promise<Category | BadRequestException> {
+    const find = await this.categoryRepository.findOne(id);
+    if (!find) throw new BadRequestException(CategoryErrorEnum.CATEGORY_NOT_FOUND);
+    return find
   }
 
   update(id: number, updateCategoryDto: UpdateCategoryDto) {

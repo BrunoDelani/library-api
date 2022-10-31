@@ -26,9 +26,10 @@ export class CategoryTypeOrmRepository implements CategoryRepository {
         return categories;
     }
 
-    findOne(id: number): Promise<Category> {
-        throw new Error("Method not implemented.");
+    async findOne(id: string): Promise<Category | null> {
+        return this.categoryRepository.findOne({ where: { id } });
     }
+
     findOneByName(name: string): Promise<Category | null> {
         return this.categoryRepository.findOne({ where: { name } })
     }

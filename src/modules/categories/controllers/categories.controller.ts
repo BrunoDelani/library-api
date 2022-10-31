@@ -34,8 +34,15 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<Category|BadRequestException> {
+    try {
+      return this.categoriesService.findOne(id);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+      throw new BadRequestException(CategoryErrorEnum.CATEGORY_NOT_FOUND);
+    }
   }
 
   @Patch(':id')
