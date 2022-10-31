@@ -63,8 +63,15 @@ export class CategoriesController {
   update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
-  ) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+  ): Promise<Category | BadRequestException> {
+    try {
+      return this.categoriesService.update(id, updateCategoryDto);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+      throw new BadRequestException(CategoryErrorEnum.CATEGORY_NOT_FOUND);
+    }
   }
 
   @Delete(':id')

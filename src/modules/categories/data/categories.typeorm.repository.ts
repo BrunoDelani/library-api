@@ -19,12 +19,7 @@ export class CategoryTypeOrmRepository implements CategoryRepository {
   async findAll(query: FindCategoryDto): Promise<Category[]> {
     const { name } = query;
     const categories = await this.categoryRepository.find({
-      where: {
-        name: name ? Like(`%${name}%`) : Like('%%'),
-      },
-      select: {
-        name: true,
-      },
+      where: { name: name ? Like(`%${name}%`) : Like('%%') },
     });
     return categories;
   }
@@ -36,8 +31,8 @@ export class CategoryTypeOrmRepository implements CategoryRepository {
   findOneByName(name: string): Promise<Category | null> {
     return this.categoryRepository.findOne({ where: { name } });
   }
-  update(id: number, payload: UpdateCategoryDto): Promise<Category> {
-    throw new Error('Method not implemented.');
+  update(payload: Category): Promise<Category> {
+    return this.categoryRepository.save(payload);
   }
   remove(id: number): Promise<void> {
     throw new Error('Method not implemented.');

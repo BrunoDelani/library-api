@@ -35,8 +35,22 @@ export class CategoriesService {
     return find;
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(
+    id: string,
+    payload: UpdateCategoryDto,
+  ): Promise<Category | BadRequestException> {
+    const nameExists = await this.categoryRepository.findOneByName(
+      payload.name,
+    );
+    const category = await this.categoryRepository.findOne(id);
+    if (category) {
+      category.name = payload.name ? payload.name : category.name;
+    } else {
+      throw new BadRequestException(CategoryErrorEnum.CATEGORY_NOT_FOUND);
+    }
+    if (nameExists && id != nameExists.id)
+      throw new BadRequestException(CategoryErrorEnum.CATEGORY_ALREADY_EXISTS);
+    return await this.categoryRepository.update(category);
   }
 
   remove(id: number) {

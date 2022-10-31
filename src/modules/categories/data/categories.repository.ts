@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { Category } from 'src/core/typeorm/entities/category.entity';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { FindCategoryDto } from '../dtos/find-category.dto';
@@ -8,6 +9,6 @@ export interface CategoryRepository {
   findAll(query: FindCategoryDto): Promise<Category[]>;
   findOne(id: string): Promise<Category | null>;
   findOneByName(name: string): Promise<Category | null>;
-  update(id: number, payload: UpdateCategoryDto): Promise<Category>;
+  update(payload: Category): Promise<Category | BadRequestException>;
   remove(id: number): Promise<void>;
 }
