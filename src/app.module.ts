@@ -10,6 +10,7 @@ import {
 import { Book } from './core/typeorm/entities/book.entity';
 import { Category } from './core/typeorm/entities/category.entity';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { BooksModule } from './modules/books/books.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
       migrations: ['./dist/core/typeorm/migrations/*.{js,ts}'],
     }),
     CategoriesModule,
+    BooksModule,
   ],
   controllers: [],
   providers: [],
