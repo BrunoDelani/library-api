@@ -1,4 +1,14 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Category } from 'src/core/typeorm/entities/category.entity';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { FindCategoryDto } from '../dtos/find-category.dto';
@@ -8,10 +18,12 @@ import { CategoriesService } from '../services/categories.service';
 
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) { }
+  constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  create(@Body() payload: CreateCategoryDto): Promise<Category | BadRequestException> {
+  create(
+    @Body() payload: CreateCategoryDto,
+  ): Promise<Category | BadRequestException> {
     try {
       return this.categoriesService.create(payload);
     } catch (err) {
@@ -23,7 +35,9 @@ export class CategoriesController {
   }
 
   @Get()
-  findAll(@Query() query: FindCategoryDto): Promise<Category[] | BadRequestException> {
+  findAll(
+    @Query() query: FindCategoryDto,
+  ): Promise<Category[] | BadRequestException> {
     try {
       return this.categoriesService.findAll(query);
     } catch (err) {
@@ -34,7 +48,7 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Category|BadRequestException> {
+  findOne(@Param('id') id: string): Promise<Category | BadRequestException> {
     try {
       return this.categoriesService.findOne(id);
     } catch (err) {
@@ -46,7 +60,10 @@ export class CategoriesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
     return this.categoriesService.update(+id, updateCategoryDto);
   }
 

@@ -8,11 +8,12 @@ import { CategoryTypeOrmRepository } from './data/categories.typeorm.repository'
 @Module({
   imports: [TypeOrmModule.forFeature([Category])],
   controllers: [CategoriesController],
-  providers: [CategoriesService,
+  providers: [
+    CategoriesService,
     {
       provide: 'categoryRepository',
-      useClass: CategoryTypeOrmRepository
+      useClass: CategoryTypeOrmRepository,
     },
   ],
 })
-export class CategoriesModule { }
+export class CategoriesModule {}
