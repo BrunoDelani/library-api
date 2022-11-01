@@ -46,8 +46,15 @@ export class BooksController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.booksService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<Book | BadRequestException> {
+    try {
+      return this.booksService.findOne(id);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    }
   }
 
   @Patch(':id')

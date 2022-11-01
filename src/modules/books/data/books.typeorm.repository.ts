@@ -48,8 +48,8 @@ export class BookTypeOrmRepository implements BookRepository {
     });
     return books;
   }
-  findOne(id: string): Promise<Book> {
-    throw new Error('Method not implemented.');
+  findOne(id: string): Promise<Book | null> {
+    return this.bookRepository.findOne({ where: { id } });
   }
   findOneByName(name: string): Promise<Book | null> {
     return this.bookRepository.findOne({ where: { name } });

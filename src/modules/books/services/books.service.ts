@@ -24,8 +24,10 @@ export class BooksService {
     return await this.bookRepository.findAll(query);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  async findOne(id: string): Promise<Book | BadRequestException> {
+    const find = await this.bookRepository.findOne(id);
+    if (!find) throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    return find;
   }
 
   update(id: number, updateBookDto: UpdateBookDto) {
