@@ -2,6 +2,7 @@ import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Book } from 'src/core/typeorm/entities/book.entity';
 import { BookRepository } from '../data/books.repository';
 import { CreateBookDto } from '../dtos/create-book.dto';
+import { FindBookDto } from '../dtos/find-book.dto';
 import { UpdateBookDto } from '../dtos/update-book.dto';
 import { BookErrorEnum } from '../errors/books.error.enum';
 
@@ -19,8 +20,8 @@ export class BooksService {
     return await this.bookRepository.create(payload);
   }
 
-  findAll() {
-    return `This action returns all books`;
+  async findAll(query: FindBookDto): Promise<Book[] | BadRequestException> {
+    return await this.bookRepository.findAll(query);
   }
 
   findOne(id: number) {
