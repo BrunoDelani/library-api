@@ -4,6 +4,7 @@ import { Book } from 'src/core/typeorm/entities/book.entity';
 import { Like, MoreThan, Repository } from 'typeorm';
 import { CreateBookDto } from '../dtos/create-book.dto';
 import { FindBookDto } from '../dtos/find-book.dto';
+import { UpdateBookDto } from '../dtos/update-book.dto';
 import { BookRepository } from './books.repository';
 
 export class BookTypeOrmRepository implements BookRepository {
@@ -54,8 +55,8 @@ export class BookTypeOrmRepository implements BookRepository {
   findOneByName(name: string): Promise<Book | null> {
     return this.bookRepository.findOne({ where: { name } });
   }
-  update(payload: Book): Promise<Book | BadRequestException> {
-    throw new Error('Method not implemented.');
+  update(payload: UpdateBookDto): Promise<Book | BadRequestException> {
+    return this.bookRepository.save(payload);
   }
   async remove(id: string): Promise<void> {
     this.bookRepository.delete(id);

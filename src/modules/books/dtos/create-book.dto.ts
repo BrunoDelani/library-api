@@ -65,7 +65,9 @@ export class CreateBookDto {
   @IsNumber()
   @IsDefined()
   @IsNotEmpty()
-  @IsPositive()
+  @Min(0, {
+    message: 'Invalid pages.',
+  })
   stock: number;
   @IsNumber()
   @IsDefined()

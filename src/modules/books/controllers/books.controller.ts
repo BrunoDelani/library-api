@@ -59,8 +59,18 @@ export class BooksController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(+id, updateBookDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateBookDto: UpdateBookDto,
+  ): Promise<Book | BadRequestException> {
+    try {
+      return this.booksService.update(id, updateBookDto);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    }
   }
 
   @Delete(':id')

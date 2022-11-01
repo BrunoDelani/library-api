@@ -30,8 +30,32 @@ export class BooksService {
     return find;
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
-    return `This action updates a #${id} book`;
+  async update(
+    id: string,
+    payload: UpdateBookDto,
+  ): Promise<Book | BadRequestException> {
+    const bookExists = await this.bookRepository.findOneByName(payload.name);
+    const book = await this.bookRepository.findOne(id);
+    if (book) {
+      if (bookExists && book.id !== bookExists.id)
+        throw new BadRequestException(BookErrorEnum.BOOK_ALREADY_EXISTS);
+      book.name = payload.name ? payload.name : book.name;
+      book.resume = payload.resume ? payload.resume : book.resume;
+      book.author = payload.author ? payload.author : book.author;
+      book.publisher = payload.publisher ? payload.publisher : book.publisher;
+      book.age_rating = payload.age_rating
+        ? payload.age_rating
+        : book.age_rating;
+      book.year_publication = payload.year_publication
+        ? payload.year_publication
+        : book.year_publication;
+      book.pages = payload.pages ? payload.pages : book.pages;
+      book.stock = payload.stock ? payload.stock : book.stock;
+      book.value = payload.value ? payload.value : book.value;
+    } else {
+      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    }
+    return await this.bookRepository.update(book);
   }
 
   async remove(id: string): Promise<void | BadRequestException> {
