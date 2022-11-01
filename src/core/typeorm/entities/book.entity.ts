@@ -43,6 +43,6 @@ export class Book {
   @Column({ type: 'decimal', precision: 6, scale: 2, nullable: false })
   value: number;
 
-  @Column({ type: 'varchar', nullable: false, unique: true })
+  @Column({ type: 'varchar', nullable: true, unique: true })
   image_path: string;
 }
