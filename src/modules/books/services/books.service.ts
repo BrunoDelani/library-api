@@ -24,15 +24,19 @@ export class BooksService {
     return await this.bookRepository.findAll(query);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} book`;
+  async findOne(id: string): Promise<Book | BadRequestException> {
+    const find = await this.bookRepository.findOne(id);
+    if (!find) throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    return find;
   }
 
   update(id: number, updateBookDto: UpdateBookDto) {
     return `This action updates a #${id} book`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  async remove(id: string): Promise<void | BadRequestException> {
+    const find = await this.bookRepository.findOne(id);
+    if (!find) throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    await this.bookRepository.remove(id);
   }
 }

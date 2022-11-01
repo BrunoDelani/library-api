@@ -29,16 +29,27 @@ export class BookTypeOrmRepository implements BookRepository {
         name: name ? Like(`%${name}%`) : Like('%%'),
         author: author ? Like(`%${author}%`) : Like('%%'),
         publisher: publisher ? Like(`%${publisher}%`) : Like('%%'),
-        age_rating: age_rating ? age_rating : MoreThan(0),
-        year_publication: year_publication ? year_publication : MoreThan(0),
-        stock: stock ? stock : MoreThan(0),
-        value: value ? value : MoreThan(0),
+        age_rating: age_rating ? age_rating : MoreThan(-1),
+        year_publication: year_publication ? year_publication : MoreThan(-1),
+        stock: stock ? stock : MoreThan(-1),
+        value: value ? value : MoreThan(-1),
+      },
+      select: {
+        id: true,
+        name: true,
+        author: true,
+        publisher: true,
+        age_rating: true,
+        year_publication: true,
+        pages: true,
+        stock: true,
+        value: true,
       },
     });
     return books;
   }
-  findOne(id: string): Promise<Book> {
-    throw new Error('Method not implemented.');
+  findOne(id: string): Promise<Book | null> {
+    return this.bookRepository.findOne({ where: { id } });
   }
   findOneByName(name: string): Promise<Book | null> {
     return this.bookRepository.findOne({ where: { name } });
@@ -46,7 +57,7 @@ export class BookTypeOrmRepository implements BookRepository {
   update(payload: Book): Promise<Book | BadRequestException> {
     throw new Error('Method not implemented.');
   }
-  remove(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async remove(id: string): Promise<void> {
+    this.bookRepository.delete(id);
   }
 }

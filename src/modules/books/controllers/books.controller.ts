@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -46,8 +47,15 @@ export class BooksController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.booksService.findOne(+id);
+  findOne(@Param('id') id: string): Promise<Book | BadRequestException> {
+    try {
+      return this.booksService.findOne(id);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    }
   }
 
   @Patch(':id')
@@ -56,7 +64,15 @@ export class BooksController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.booksService.remove(+id);
+  @HttpCode(204)
+  remove(@Param('id') id: string): Promise<void | BadRequestException> {
+    try {
+      return this.booksService.remove(id);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    }
   }
 }
