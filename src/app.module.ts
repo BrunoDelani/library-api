@@ -11,6 +11,7 @@ import { Book } from './core/typeorm/entities/book.entity';
 import { Category } from './core/typeorm/entities/category.entity';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { BooksModule } from './modules/books/books.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -26,6 +27,9 @@ import { BooksModule } from './modules/books/books.module';
       autoLoadEntities: true,
       migrationsRun: true,
       migrations: ['./dist/core/typeorm/migrations/*.{js,ts}'],
+    }),
+    MulterModule.register({
+      dest: './uploads',
     }),
     CategoriesModule,
     BooksModule,
