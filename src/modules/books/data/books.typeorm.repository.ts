@@ -57,7 +57,7 @@ export class BookTypeOrmRepository implements BookRepository {
   update(payload: Book): Promise<Book | BadRequestException> {
     throw new Error('Method not implemented.');
   }
-  remove(id: string): Promise<void> {
-    throw new Error('Method not implemented.');
+  async remove(id: string): Promise<void> {
+    this.bookRepository.delete(id);
   }
 }

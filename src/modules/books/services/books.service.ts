@@ -34,7 +34,9 @@ export class BooksService {
     return `This action updates a #${id} book`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} book`;
+  async remove(id: string): Promise<void | BadRequestException> {
+    const find = await this.bookRepository.findOne(id);
+    if (!find) throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
+    await this.bookRepository.remove(id);
   }
 }
