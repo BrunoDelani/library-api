@@ -50,7 +50,8 @@ export class BooksService {
         ? payload.year_publication
         : book.year_publication;
       book.pages = payload.pages ? payload.pages : book.pages;
-      book.stock = payload.stock ? payload.stock : book.stock;
+      if (Number(payload.stock) || Number(payload.stock) === 0)
+        book.stock = payload.stock;
       book.value = payload.value ? payload.value : book.value;
     } else {
       throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
