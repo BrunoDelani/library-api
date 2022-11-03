@@ -36,7 +36,7 @@ export class BooksController {
   @Get('/categories')
   findCategories(@Body() categories: string[]) {
     try {
-      console.log(categories);
+      return this.booksService.findCategories(categories);
     } catch (err) {
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);

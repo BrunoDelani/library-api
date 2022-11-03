@@ -34,6 +34,10 @@ export class BooksService {
     return find;
   }
 
+  findCategories(categories: String[]) {
+    console.log(categories)
+  }
+
   async findStock(): Promise<Book[] | BadRequestException> {
     const stock = await this.bookRepository.findStock();
     if (!stock) throw new BadRequestException(BookErrorEnum.BOOKS_NOT_FOUND);
