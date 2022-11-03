@@ -14,7 +14,6 @@ import { Book } from 'src/core/typeorm/entities/book.entity';
 import { CreateBookDto } from '../dtos/create-book.dto';
 import { FindBookDto } from '../dtos/find-book.dto';
 import { UpdateBookDto } from '../dtos/update-book.dto';
-import { BookErrorEnum } from '../errors/books.error.enum';
 import { BooksService } from '../services/books.service';
 
 @Controller('books')
@@ -31,7 +30,28 @@ export class BooksController {
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
       }
-      throw new BadRequestException(BookErrorEnum.BOOK_ALREADY_EXISTS);
+    }
+  }
+
+  @Get('/categories')
+  findBookByCategories(@Query('category') category: string[]) {
+    try {
+      return this.booksService.findBookByCategories(category);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+    }
+  }
+
+  @Get('/low-stock')
+  findStock(): Promise<Book[] | BadRequestException> {
+    try {
+      return this.booksService.findStock();
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
     }
   }
 
@@ -46,7 +66,7 @@ export class BooksController {
     }
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string): Promise<Book | BadRequestException> {
     try {
       return this.booksService.findOne(id);
@@ -54,16 +74,24 @@ export class BooksController {
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
       }
-      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
     }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.booksService.update(+id, updateBookDto);
+  @Patch('/:id')
+  update(
+    @Param('id') id: string,
+    @Body() updateBookDto: UpdateBookDto,
+  ): Promise<Book | BadRequestException> {
+    try {
+      return this.booksService.update(id, updateBookDto);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+    }
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   @HttpCode(204)
   remove(@Param('id') id: string): Promise<void | BadRequestException> {
     try {
@@ -72,7 +100,6 @@ export class BooksController {
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
       }
-      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
     }
   }
 }
