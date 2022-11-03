@@ -28,9 +28,12 @@ export class BooksController {
     try {
       return this.booksService.create(createBookDto);
     } catch (err) {
+      console.log(err);
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
       }
+      if (err === BookErrorEnum.BOOK_CATEGORY_NOT_FOUND)
+        throw new BadRequestException(BookErrorEnum.BOOK_CATEGORY_NOT_FOUND);
       throw new BadRequestException(BookErrorEnum.BOOK_ALREADY_EXISTS);
     }
   }

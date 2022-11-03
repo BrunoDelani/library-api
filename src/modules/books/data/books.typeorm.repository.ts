@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from 'src/core/typeorm/entities/book.entity';
+import { Category } from 'src/core/typeorm/entities/category.entity';
 import { LessThan, Like, MoreThan, Repository } from 'typeorm';
 import { CreateBookDto } from '../dtos/create-book.dto';
 import { FindBookDto } from '../dtos/find-book.dto';
@@ -11,6 +12,8 @@ export class BookTypeOrmRepository implements BookRepository {
   constructor(
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
   ) {}
 
   create(payload: CreateBookDto): Promise<Book> {
@@ -74,6 +77,10 @@ export class BookTypeOrmRepository implements BookRepository {
 
   findOneByName(name: string): Promise<Book | null> {
     return this.bookRepository.findOne({ where: { name } });
+  }
+
+  async findCategories(id: string): Promise<Category | null> {
+    return this.categoryRepository.findOne({ where: { id } });
   }
 
   update(payload: UpdateBookDto): Promise<Book | BadRequestException> {

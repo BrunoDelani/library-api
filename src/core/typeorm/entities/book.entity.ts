@@ -18,7 +18,7 @@ export class Book {
   @Column({ type: 'varchar', length: 500, nullable: false })
   resume: string;
 
-  @ManyToMany(() => Category)
+  @ManyToMany(() => Category, { eager: true })
   @JoinTable()
   categories: Category[];
 

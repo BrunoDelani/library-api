@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDefined,
   IsEnum,
   IsNotEmpty,
@@ -9,6 +10,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
+import { Category } from 'src/core/typeorm/entities/category.entity';
 
 export class CreateBookDto {
   @IsString()
@@ -74,4 +76,8 @@ export class CreateBookDto {
   @IsNotEmpty()
   @IsPositive()
   value: number;
+
+  @IsArray()
+  @IsNotEmpty()
+  categories: Category[];
 }

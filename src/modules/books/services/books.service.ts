@@ -1,5 +1,6 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { Book } from 'src/core/typeorm/entities/book.entity';
+import { Category } from 'src/core/typeorm/entities/category.entity';
 import { BookRepository } from '../data/books.repository';
 import { CreateBookDto } from '../dtos/create-book.dto';
 import { FindBookDto } from '../dtos/find-book.dto';
@@ -16,6 +17,9 @@ export class BooksService {
   async create(payload: CreateBookDto): Promise<Book | BadRequestException> {
     if (await this.bookRepository.findOneByName(payload.name)) {
       throw new BadRequestException(BookErrorEnum.BOOK_ALREADY_EXISTS);
+    }
+    if (!(await this.CategorySearch(payload.categories))) {
+      throw new BadRequestException(BookErrorEnum.BOOK_CATEGORY_NOT_FOUND);
     }
     return await this.bookRepository.create(payload);
   }
@@ -69,5 +73,14 @@ export class BooksService {
     const find = await this.bookRepository.findOne(id);
     if (!find) throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
     await this.bookRepository.remove(id);
+  }
+
+  async CategorySearch(categories: Category[]): Promise<boolean> {
+    let verify = true;
+    for (let i = 0; i < categories.length; i++) {
+      if (!(await this.bookRepository.findCategories(categories[i].id)))
+        verify = false;
+    }
+    return verify;
   }
 }
