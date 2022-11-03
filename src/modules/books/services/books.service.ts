@@ -30,6 +30,12 @@ export class BooksService {
     return find;
   }
 
+  async findStock(): Promise<Book[] | BadRequestException> {
+    const stock = await this.bookRepository.findStock();
+    if (!stock) throw new BadRequestException(BookErrorEnum.BOOKS_NOT_FOUND);
+    return stock;
+  }
+
   async update(
     id: string,
     payload: UpdateBookDto,

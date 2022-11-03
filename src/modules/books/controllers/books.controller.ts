@@ -35,6 +35,17 @@ export class BooksController {
     }
   }
 
+  @Get('/low-stock')
+  findStock(): Promise<Book[] | BadRequestException> {
+    try {
+      return this.booksService.findStock();
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+    }
+  }
+
   @Get()
   findAll(@Query() query: FindBookDto): Promise<Book[] | BadRequestException> {
     try {

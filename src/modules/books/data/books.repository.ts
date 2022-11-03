@@ -8,6 +8,7 @@ export interface BookRepository {
   create(payload: CreateBookDto): Promise<Book>;
   findAll(query: FindBookDto): Promise<Book[]>;
   findOne(id: string): Promise<Book | null>;
+  findStock(): Promise<Book[] | null>;
   findOneByName(name: string): Promise<Book | null>;
   update(payload: UpdateBookDto): Promise<Book | BadRequestException>;
   remove(id: string): Promise<void>;

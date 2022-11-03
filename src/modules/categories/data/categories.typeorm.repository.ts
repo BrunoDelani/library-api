@@ -30,9 +30,11 @@ export class CategoryTypeOrmRepository implements CategoryRepository {
   findOneByName(name: string): Promise<Category | null> {
     return this.categoryRepository.findOne({ where: { name } });
   }
+
   update(payload: Category): Promise<Category> {
     return this.categoryRepository.save(payload);
   }
+
   async remove(id: string): Promise<void> {
     this.categoryRepository.delete(id);
   }

@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from 'src/core/typeorm/entities/book.entity';
-import { Like, MoreThan, Repository } from 'typeorm';
+import { LessThan, Like, MoreThan, Repository } from 'typeorm';
 import { CreateBookDto } from '../dtos/create-book.dto';
 import { FindBookDto } from '../dtos/find-book.dto';
 import { UpdateBookDto } from '../dtos/update-book.dto';
@@ -12,9 +12,11 @@ export class BookTypeOrmRepository implements BookRepository {
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
   ) {}
+
   create(payload: CreateBookDto): Promise<Book> {
     return this.bookRepository.save(payload);
   }
+
   async findAll(query: FindBookDto): Promise<Book[]> {
     const {
       name,
@@ -49,15 +51,35 @@ export class BookTypeOrmRepository implements BookRepository {
     });
     return books;
   }
+
   findOne(id: string): Promise<Book | null> {
     return this.bookRepository.findOne({ where: { id } });
   }
+
+  findStock(): Promise<Book[] | null> {
+    return this.bookRepository.find({
+      where: {
+        stock: LessThan(10),
+      },
+      select: {
+        name: true,
+        author: true,
+        publisher: true,
+        year_publication: true,
+        stock: true,
+        value: true,
+      },
+    });
+  }
+
   findOneByName(name: string): Promise<Book | null> {
     return this.bookRepository.findOne({ where: { name } });
   }
+
   update(payload: UpdateBookDto): Promise<Book | BadRequestException> {
     return this.bookRepository.save(payload);
   }
+
   async remove(id: string): Promise<void> {
     this.bookRepository.delete(id);
   }
