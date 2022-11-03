@@ -1,4 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
+import { Book } from 'src/core/typeorm/entities/book.entity';
 import { Category } from 'src/core/typeorm/entities/category.entity';
 import { Like, Repository } from 'typeorm';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
@@ -9,6 +10,8 @@ export class CategoryTypeOrmRepository implements CategoryRepository {
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
+    @InjectRepository(Book)
+    private bookRepository: Repository<Book>,
   ) {}
 
   async create(payload: CreateCategoryDto): Promise<Category> {
@@ -37,5 +40,9 @@ export class CategoryTypeOrmRepository implements CategoryRepository {
 
   async remove(id: string): Promise<void> {
     this.categoryRepository.delete(id);
+  }
+
+  findCategoryInBook(id: string): Promise<Book | null> {
+    return this.bookRepository.findOne({ where: { categories: { id } } });
   }
 }

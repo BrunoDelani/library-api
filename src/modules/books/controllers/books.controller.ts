@@ -8,7 +8,7 @@ import {
   Param,
   Patch,
   Post,
-  Query
+  Query,
 } from '@nestjs/common';
 import { Book } from 'src/core/typeorm/entities/book.entity';
 import { CreateBookDto } from '../dtos/create-book.dto';

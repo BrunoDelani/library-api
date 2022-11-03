@@ -57,6 +57,8 @@ export class CategoriesService {
     const category = await this.categoryRepository.findOne(id);
     if (!category)
       throw new BadRequestException(CategoryErrorEnum.CATEGORY_NOT_FOUND);
+    if (await this.categoryRepository.findCategoryInBook(id))
+      throw new BadRequestException(CategoryErrorEnum.CATEGORY_IN_BOOK);
     await this.categoryRepository.remove(id);
   }
 }
