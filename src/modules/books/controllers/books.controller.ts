@@ -33,7 +33,7 @@ export class BooksController {
     }
   }
 
-  @Get('/categories/:category')
+  @Get('/categories')
   findBookByCategories(@Query('category') category: string[]) {
     try {
       return this.booksService.findBookByCategories(category);
