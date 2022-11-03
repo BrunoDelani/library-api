@@ -34,8 +34,8 @@ export class BooksService {
     return find;
   }
 
-  findCategories(categories: String[]) {
-    console.log(categories)
+  async findBookByCategories(categories: string[]) {
+    return await this.bookRepository.findBookByCategories(categories);
   }
 
   async findStock(): Promise<Book[] | BadRequestException> {

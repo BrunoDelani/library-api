@@ -10,6 +10,7 @@ export interface BookRepository {
   findAll(query: FindBookDto): Promise<Book[]>;
   findOne(id: string): Promise<Book | null>;
   findStock(): Promise<Book[] | null>;
+  findBookByCategories(categories: string[]): Promise<Book[] | null>;
   findCategories(id: string): Promise<Category | null>;
   findOneByName(name: string): Promise<Book | null>;
   update(payload: UpdateBookDto): Promise<Book | BadRequestException>;

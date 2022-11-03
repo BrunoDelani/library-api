@@ -33,10 +33,10 @@ export class BooksController {
     }
   }
 
-  @Get('/categories')
-  findCategories(@Body() categories: string[]) {
+  @Get('/categories/:category')
+  findBookByCategories(@Query('category') category: string[]) {
     try {
-      return this.booksService.findCategories(categories);
+      return this.booksService.findBookByCategories(category);
     } catch (err) {
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
@@ -66,7 +66,7 @@ export class BooksController {
     }
   }
 
-  @Get(':id')
+  @Get('/:id')
   findOne(@Param('id') id: string): Promise<Book | BadRequestException> {
     try {
       return this.booksService.findOne(id);
@@ -77,7 +77,7 @@ export class BooksController {
     }
   }
 
-  @Patch(':id')
+  @Patch('/:id')
   update(
     @Param('id') id: string,
     @Body() updateBookDto: UpdateBookDto,
@@ -91,7 +91,7 @@ export class BooksController {
     }
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   @HttpCode(204)
   remove(@Param('id') id: string): Promise<void | BadRequestException> {
     try {
