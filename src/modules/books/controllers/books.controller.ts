@@ -8,13 +8,12 @@ import {
   Param,
   Patch,
   Post,
-  Query,
+  Query
 } from '@nestjs/common';
 import { Book } from 'src/core/typeorm/entities/book.entity';
 import { CreateBookDto } from '../dtos/create-book.dto';
 import { FindBookDto } from '../dtos/find-book.dto';
 import { UpdateBookDto } from '../dtos/update-book.dto';
-import { BookErrorEnum } from '../errors/books.error.enum';
 import { BooksService } from '../services/books.service';
 
 @Controller('books')
@@ -28,13 +27,9 @@ export class BooksController {
     try {
       return this.booksService.create(createBookDto);
     } catch (err) {
-      console.log(err);
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
       }
-      if (err === BookErrorEnum.BOOK_CATEGORY_NOT_FOUND)
-        throw new BadRequestException(BookErrorEnum.BOOK_CATEGORY_NOT_FOUND);
-      throw new BadRequestException(BookErrorEnum.BOOK_ALREADY_EXISTS);
     }
   }
 
@@ -68,7 +63,6 @@ export class BooksController {
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
       }
-      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
     }
   }
 
@@ -83,7 +77,6 @@ export class BooksController {
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
       }
-      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
     }
   }
 
@@ -96,7 +89,6 @@ export class BooksController {
       if (err?.driverError?.sqlMessage) {
         throw new BadRequestException(err.driverError.sqlMessage);
       }
-      throw new BadRequestException(BookErrorEnum.BOOK_NOT_FOUND);
     }
   }
 }
