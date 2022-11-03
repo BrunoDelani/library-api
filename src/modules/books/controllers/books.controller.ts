@@ -33,6 +33,17 @@ export class BooksController {
     }
   }
 
+  @Get('/categories')
+  findCategories(@Body() categories: string[]) {
+    try {
+      console.log(categories);
+    } catch (err) {
+      if (err?.driverError?.sqlMessage) {
+        throw new BadRequestException(err.driverError.sqlMessage);
+      }
+    }
+  }
+
   @Get('/low-stock')
   findStock(): Promise<Book[] | BadRequestException> {
     try {
